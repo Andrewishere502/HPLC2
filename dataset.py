@@ -69,7 +69,7 @@ for acc_file in acc_files:
         # Create a list of retention times
         ret_times = list(sample_rows["Retention Time"])
         # Create a list of total areas, indices correspond to ret_times
-        total_areas = sample_rows[["240nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]].sum(axis=1)
+        total_areas = sample_rows[["218nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]].sum(axis=1)
         # Get the chem data for this sample name
         chem_data = get_chem_names(chem_df, ret_times, list(total_areas))
         
