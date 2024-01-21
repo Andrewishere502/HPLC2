@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 from refiner import Refiner
@@ -23,9 +24,8 @@ C_MIN_GROUP_SIZE = 3  # Inclusive
 
 
 
-acc_files = ["acc_SUMR2023-07-1108-35-49.csv",
-             "acc_SUMR2023-07-1116-38-47.csv",
-             "acc_SUMR2023-07-1811-01-20.csv"]
+acc_files = [filename for filename in os.listdir()
+		if filename[:4] == "acc_"]
 
 
 pp_ret_times = []
