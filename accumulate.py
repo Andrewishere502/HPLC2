@@ -11,7 +11,7 @@ def get_report_signals(sample_path):
     """Return the signals for a sample."""
     
     # Read lines from the report00.csv file
-    with open(Path(sample_path, "Report00.csv"), "r", encoding="utf-16") as file:
+    with open(Path(sample_path, "Report00.CSV"), "r", encoding="utf-16") as file:
         lines = file.readlines()
     
     # Dict to track which report files have which wavelength
@@ -28,7 +28,7 @@ def get_report_signals(sample_path):
             continue
 
         # Add the report data to signals
-        report_signals.update({f"REPORT0{report_num}": wavelength})
+        report_signals.update({f"REPORT0{report_num}.CSV": wavelength})
     return report_signals
 
 
@@ -36,7 +36,7 @@ def get_report_header(sample_path):
     """Return the header (names of columns) for a sample."""
 
     # Read lines from the report00.csv file
-    with open(Path(sample_path, "Report00.csv"), "r", encoding="utf-16") as file:
+    with open(Path(sample_path, "Report00.CSV"), "r", encoding="utf-16") as file:
         lines = file.readlines()
     
     # Dict to store header
@@ -60,7 +60,7 @@ def get_report_header(sample_path):
 def get_chem_classes(experiment_df):
     """Return a list of predicted chemical classes."""
     # Create a df of features for the model to predict from
-    predict_df = experiment_df[["Retention Time", "240nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]]
+    predict_df = experiment_df[["Retention Time", "218nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]]
 
     # Replace NaN values with the median for that column
     for column_name in predict_df.columns:
@@ -74,7 +74,7 @@ def get_chem_classes(experiment_df):
 def get_report_dfs(sample_path, report_names, report_header):
     report_dfs = []
     for report_name in report_names:
-        report_df = pd.read_csv(Path(sample_path, report_name + ".csv"),
+        report_df = pd.read_csv(Path(sample_path, report_name),
                                 names=report_header,
                                 encoding="utf-16")
         # Round retention time to 1 decimal place
@@ -105,14 +105,19 @@ def get_invalid_rows(experiment_df):
 
 # Load the training data for our classifier model
 training_df = pd.read_csv("train.csv")
-X = training_df[["Retention Time", "240nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]]
+X = training_df[["Retention Time", "218nm Area", "250nm Area", "260nm Area", "330nm Area", "350nm Area"]]
 y = list(training_df["ID"])
 
 # Create and train the model
 logit_model = LogisticRegression().fit(X, y)
 
 # List of experiments to be accumulated
-experiments = ["SUMR2023-07-1108-35-49", "SUMR2023-07-1116-38-47", "SUMR2023-07-1811-01-20"]
+experiments = [
+	"Plate2_9WeekAndMonarchs_11_9_232023-11-0914-43-29",
+	"New_GV2023-10-1915-57-44",
+	"New2023-11-0609-22-32",
+	"Herbiv_prepost_ALL_sumr232023-11-0216-42-05"
+]
 # Loop through all the experiments, acculumating their data
 for experiment in experiments:
     # Get the paths to all samples contained within this experiment
